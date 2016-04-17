@@ -44,4 +44,9 @@ public class PrimerTest {
     public void hello() {
         System.out.println("EL TEST!");
     }
+    
+    @Test
+    public void failtest(){
+     throw new NullPointerException("FAIL");
+    }
 }
