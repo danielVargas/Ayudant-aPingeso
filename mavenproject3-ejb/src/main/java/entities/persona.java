@@ -6,55 +6,32 @@
 package entities;
 
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author Dany
  */
 @Entity
-@NamedQueries({
-    @NamedQuery(name = "cursos.findAll", query = "SELECT p FROM cursos p"),
-    @NamedQuery(name = "cursos.findByKey", query = "SELECT p FROM cursos p WHERE p.id = :id"),
-})
-public class cursos implements Serializable {
+public class persona implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    private String nombreCurso;
     
-    private String nombre;
-    
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    private List<profesor> profesores;
-
-    public List<profesor> getProfesores() {
-        return profesores;
-    }
-
-    public void setProfesores(List<profesor> profesores) {
-        this.profesores = profesores;
-    }
-    
-    
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-    
+    @NotNull(message = "Debe ingresar un curso")
+    @JoinColumn(nullable = false)
+    @ManyToOne
+    private cursos curso;
     
     public Long getId() {
         return id;
@@ -64,6 +41,24 @@ public class cursos implements Serializable {
         this.id = id;
     }
 
+    public String getNombreCurso() {
+        return nombreCurso;
+    }
+
+    public void setNombreCurso(String nombreCurso) {
+        this.nombreCurso = nombreCurso;
+    }
+
+    public cursos getCurso() {
+        return curso;
+    }
+
+    public void setCurso(cursos curso) {
+        this.curso = curso;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -74,10 +69,10 @@ public class cursos implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof cursos)) {
+        if (!(object instanceof persona)) {
             return false;
         }
-        cursos other = (cursos) object;
+        persona other = (persona) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -86,7 +81,7 @@ public class cursos implements Serializable {
 
     @Override
     public String toString() {
-        return nombre;
+        return "entities.persona[ id=" + id + " ]";
     }
     
 }

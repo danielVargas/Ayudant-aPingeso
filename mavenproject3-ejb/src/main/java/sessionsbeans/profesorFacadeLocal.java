@@ -5,7 +5,6 @@
  */
 package sessionsbeans;
 
-import entities.cursos;
 import entities.profesor;
 import java.util.List;
 import javax.ejb.Local;
@@ -15,23 +14,21 @@ import javax.ejb.Local;
  * @author Dany
  */
 @Local
-public interface cursosFacadeLocal {
+public interface profesorFacadeLocal {
 
-    void create(cursos cursos);
+    void create(profesor profesor);
 
-    void edit(cursos cursos);
+    void edit(profesor profesor);
 
-    void remove(cursos cursos);
+    void remove(profesor profesor);
 
-    cursos find(Object id);
+    profesor find(Object id);
 
-    List<cursos> findAll();
+    List<profesor> findAll();
 
-    List<cursos> findRange(int[] range);
+    List<profesor> findRange(int[] range);
 
     int count();
-    
-    void crearCurso(cursos curso, List<profesor> profesores);
     
     Object findByID(Long id);
     

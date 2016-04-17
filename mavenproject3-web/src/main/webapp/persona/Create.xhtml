@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="personaCreateDlg" widgetVar="personaCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreatepersonaTitle}">
+            <h:form id="personaCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{personaController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreatepersonaLabel_id}" for="id" />
+                        <p:inputText id="id" value="#{personaController.selected.id}" title="#{bundle.CreatepersonaTitle_id}" />
+                        <p:outputLabel value="#{bundle.CreatepersonaLabel_nombreCurso}" for="nombreCurso" />
+                        <p:inputText id="nombreCurso" value="#{personaController.selected.nombreCurso}" title="#{bundle.CreatepersonaTitle_nombreCurso}" />
+                        <p:outputLabel value="#{bundle.CreatepersonaLabel_curso}" for="curso" />
+                        <p:selectOneMenu id="curso" value="#{personaController.selected.curso}" required="true" requiredMessage="#{bundle.EditpersonaRequiredMessage_curso}">
+                            <f:selectItems value="#{cursosController.itemsAvailableSelectOne}"
+                                           var="cursoItem"
+                                           itemValue="#{cursoItem}"/>
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{personaController.create}" value="#{bundle.Save}" update="display,:personaListForm:datalist,:growl" oncomplete="handleSubmit(args,'personaCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="personaCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

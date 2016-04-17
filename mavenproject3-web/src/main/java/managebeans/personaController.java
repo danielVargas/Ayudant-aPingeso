@@ -1,13 +1,11 @@
 package managebeans;
 
-import entities.cursos;
-import entities.profesor;
+import entities.persona;
 import managebeans.util.JsfUtil;
 import managebeans.util.JsfUtil.PersistAction;
-import sessionsbeans.cursosFacadeLocal;
+import sessionsbeans.personaFacadeLocal;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -16,43 +14,28 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.inject.Inject;
-import javax.management.Query;
-import sessionsbeans.profesorFacadeLocal;
 
-@Named("cursosController")
+@Named("personaController")
 @SessionScoped
-public class cursosController implements Serializable {
+public class personaController implements Serializable {
 
     @EJB
-    private cursosFacadeLocal ejbFacade;
-    private profesorFacadeLocal profFacade;
-    private List<cursos> items = null;
-    private cursos selected;
-    private List<Long> profes;
+    private personaFacadeLocal ejbFacade;
+    private List<persona> items = null;
+    private persona selected;
 
-    public cursosController() {
+    public personaController() {
     }
 
-    public List<Long> getProfes() {
-        return profes;
-    }
-
-    public void setProfes(List<Long> profes) {
-        this.profes = profes;
-    }
-
-    
-    public cursos getSelected() {
+    public persona getSelected() {
         return selected;
     }
 
-    public void setSelected(cursos selected) {
+    public void setSelected(persona selected) {
         this.selected = selected;
     }
 
@@ -62,50 +45,36 @@ public class cursosController implements Serializable {
     protected void initializeEmbeddableKey() {
     }
 
-    private cursosFacadeLocal getFacade() {
+    private personaFacadeLocal getFacade() {
         return ejbFacade;
     }
 
-    public cursos prepareCreate() {
-        selected = new cursos();
-        profes = new  ArrayList();
+    public persona prepareCreate() {
+        selected = new persona();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        
-        List <profesor> profesores = new ArrayList<>();
-        Long id= Long.valueOf("1");
-        Object obj = profFacade.findByID(1L);
-        System.out.println(obj);
-        for (int i = 0; i < profes.size(); i++) {
-            System.out.println(profes.get(i));
-            profesor profesor = profFacade.find(profes.get(i));
-            profesores.add(profesor);
-        }
-        selected.setProfesores(profesores);
-        getFacade().crearCurso(selected, selected.getProfesores());
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage("", new FacesMessage("Se ha creado el curso con éxito."));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("personaCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
     public void update() {
-        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("cursosUpdated"));
+        persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("personaUpdated"));
     }
 
     public void destroy() {
-        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("cursosDeleted"));
+        persist(PersistAction.DELETE, ResourceBundle.getBundle("/Bundle").getString("personaDeleted"));
         if (!JsfUtil.isValidationFailed()) {
             selected = null; // Remove selection
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
 
-    public List<cursos> getItems() {
+    public List<persona> getItems() {
         if (items == null) {
             items = getFacade().findAll();
         }
@@ -140,29 +109,29 @@ public class cursosController implements Serializable {
         }
     }
 
-    public cursos getcursos(java.lang.Long id) {
+    public persona getpersona(java.lang.Long id) {
         return getFacade().find(id);
     }
 
-    public List<cursos> getItemsAvailableSelectMany() {
+    public List<persona> getItemsAvailableSelectMany() {
         return getFacade().findAll();
     }
 
-    public List<cursos> getItemsAvailableSelectOne() {
+    public List<persona> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
 
-    @FacesConverter(forClass = cursos.class)
-    public static class cursosControllerConverter implements Converter {
+    @FacesConverter(forClass = persona.class)
+    public static class personaControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            cursosController controller = (cursosController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "cursosController");
-            return controller.getcursos(getKey(value));
+            personaController controller = (personaController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "personaController");
+            return controller.getpersona(getKey(value));
         }
 
         java.lang.Long getKey(String value) {
@@ -182,11 +151,11 @@ public class cursosController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof cursos) {
-                cursos o = (cursos) object;
+            if (object instanceof persona) {
+                persona o = (persona) object;
                 return getStringKey(o.getId());
             } else {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), cursos.class.getName()});
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), persona.class.getName()});
                 return null;
             }
         }

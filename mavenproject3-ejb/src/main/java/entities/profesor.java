@@ -7,7 +7,6 @@ package entities;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,36 +22,35 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "cursos.findAll", query = "SELECT p FROM cursos p"),
-    @NamedQuery(name = "cursos.findByKey", query = "SELECT p FROM cursos p WHERE p.id = :id"),
+    @NamedQuery(name = "profesor.findAll", query = "SELECT p FROM profesor p"),
+    @NamedQuery(name = "profesor.findByKey", query = "SELECT p FROM profesor p WHERE p.id = :id"),
 })
-public class cursos implements Serializable {
+public class profesor implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
-    
-    private String nombre;
-    
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    private List<profesor> profesores;
+    private String nombreProfesor;
 
-    public List<profesor> getProfesores() {
-        return profesores;
+    public String getNombreProfesor() {
+        return nombreProfesor;
     }
 
-    public void setProfesores(List<profesor> profesores) {
-        this.profesores = profesores;
+    public void setNombreProfesor(String nombreProfesor) {
+        this.nombreProfesor = nombreProfesor;
     }
     
     
-    public String getNombre() {
-        return nombre;
+    @ManyToMany(mappedBy = "profesores")
+    private List<cursos> cursos;
+
+    public List<cursos> getCursos() {
+        return cursos;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setCursos(List<cursos> cursos) {
+        this.cursos = cursos;
     }
     
     
@@ -74,10 +72,10 @@ public class cursos implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof cursos)) {
+        if (!(object instanceof profesor)) {
             return false;
         }
-        cursos other = (cursos) object;
+        profesor other = (profesor) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -86,7 +84,7 @@ public class cursos implements Serializable {
 
     @Override
     public String toString() {
-        return nombre;
+        return nombreProfesor;
     }
     
 }
