@@ -16,6 +16,12 @@
                         <p:inputText id="nombre" value="#{cursosController.selected.nombre}" title="#{bundle.CreatecursosTitle_nombre}" />
                         <p:outputLabel value="#{bundle.CreatecursosLabel_id}" for="id" />
                         <p:inputText id="id" value="#{cursosController.selected.id}" title="#{bundle.CreatecursosTitle_id}" />
+                        <p:selectManyCheckbox id="profesores" value="#{cursosController.prof}" required="true" requiredMessage="#{bundle.EditpersonaRequiredMessage_curso}">
+                            
+                            <f:selectItems value="#{profesorController.itemsAvailableSelectMany}"
+                                           var="profesorItem"
+                                           itemValue="#{profesorItem.id}"/>
+                        </p:selectManyCheckbox>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{cursosController.create}" value="#{bundle.Save}" update="display,:cursosListForm:datalist,:growl" oncomplete="handleSubmit(args,'cursosCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="cursosCreateDialog.hide()"/>

@@ -1,11 +1,13 @@
 package managebeans;
 
 import entities.cursos;
+import entities.profesor;
 import managebeans.util.JsfUtil;
 import managebeans.util.JsfUtil.PersistAction;
 import sessionsbeans.cursosFacadeLocal;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -18,6 +20,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import sessionsbeans.profesorFacadeLocal;
 
 @Named("cursosController")
 @SessionScoped
@@ -27,10 +30,21 @@ public class cursosController implements Serializable {
     private cursosFacadeLocal ejbFacade;
     private List<cursos> items = null;
     private cursos selected;
-
+    private List<String> prof = null;
+    @EJB
+    private profesorFacadeLocal profacade;
     public cursosController() {
     }
 
+    public List<String> getProf() {
+        return prof;
+    }
+
+    public void setProf(List<String> prof) {
+        this.prof = prof;
+    }
+
+    
     public cursos getSelected() {
         return selected;
     }
@@ -56,6 +70,13 @@ public class cursosController implements Serializable {
     }
 
     public void create() {
+        List <profesor> profesores = new ArrayList<>();
+        for (int i = 0; i < prof.size(); i++){
+            profesor proftemp =  profacade.find(Long.valueOf(prof.get(i)));
+            profesores.add(proftemp);
+            
+        }
+        selected.setProfesores(profesores);
         persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("cursosCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.

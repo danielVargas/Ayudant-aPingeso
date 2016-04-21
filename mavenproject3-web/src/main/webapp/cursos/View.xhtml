@@ -17,6 +17,18 @@
                         <h:outputText value="#{bundle.ViewcursosLabel_id}"/>
                         <h:outputText value="#{cursosController.selected.id}" title="#{bundle.ViewcursosTitle_id}"/>
                     </p:panelGrid>
+                    <table>
+                    <ui:repeat value="#{cursosController.selected.profesores}" var="prof">
+                        <tr>
+                            <td>
+                                <p:outputLabel value="#{prof.id}"/> 
+                            </td>
+                            <td>
+                                <p:outputLabel value="#{prof.nombreProfesor}"/> 
+                            </td>
+                        </tr>
+                    </ui:repeat>
+                    </table>
                     <p:commandButton value="#{bundle.Close}" onclick="cursosViewDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
