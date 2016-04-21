@@ -43,7 +43,7 @@
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListpersonaTitle_curso}"/>
                             </f:facet>
-                            <h:outputText value="#{item.curso}"/>
+                            <h:outputText value="#{item.curso.nombre}"/>
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{personaController.prepareCreate}" update=":personaCreateForm" oncomplete="PF('personaCreateDialog').show()"/>

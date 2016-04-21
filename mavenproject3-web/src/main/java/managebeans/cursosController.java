@@ -1,13 +1,11 @@
 package managebeans;
 
 import entities.cursos;
-import entities.profesor;
 import managebeans.util.JsfUtil;
 import managebeans.util.JsfUtil.PersistAction;
 import sessionsbeans.cursosFacadeLocal;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -16,14 +14,10 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.inject.Inject;
-import javax.management.Query;
-import sessionsbeans.profesorFacadeLocal;
 
 @Named("cursosController")
 @SessionScoped
@@ -31,23 +25,12 @@ public class cursosController implements Serializable {
 
     @EJB
     private cursosFacadeLocal ejbFacade;
-    private profesorFacadeLocal profFacade;
     private List<cursos> items = null;
     private cursos selected;
-    private List<Long> profes;
 
     public cursosController() {
     }
 
-    public List<Long> getProfes() {
-        return profes;
-    }
-
-    public void setProfes(List<Long> profes) {
-        this.profes = profes;
-    }
-
-    
     public cursos getSelected() {
         return selected;
     }
@@ -68,26 +51,12 @@ public class cursosController implements Serializable {
 
     public cursos prepareCreate() {
         selected = new cursos();
-        profes = new  ArrayList();
         initializeEmbeddableKey();
         return selected;
     }
 
     public void create() {
-        
-        List <profesor> profesores = new ArrayList<>();
-        Long id= Long.valueOf("1");
-        Object obj = profFacade.findByID(1L);
-        System.out.println(obj);
-        for (int i = 0; i < profes.size(); i++) {
-            System.out.println(profes.get(i));
-            profesor profesor = profFacade.find(profes.get(i));
-            profesores.add(profesor);
-        }
-        selected.setProfesores(profesores);
-        getFacade().crearCurso(selected, selected.getProfesores());
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage("", new FacesMessage("Se ha creado el curso con éxito."));
+        persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("cursosCreated"));
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
         }
